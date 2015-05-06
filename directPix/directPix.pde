@@ -14,6 +14,19 @@ void setup() {
   size(source.width,source.height);
 }
 
+// given two PImages, function will return error(difference) as a floating point number from 0 to 1
+// e.g. a 5% error between the images will return 0.05
+// a 5% error is the same as a 95% match
+// match = 1 - error
+// match% = (1 - error)*100%
+// 
+// example: to test for 90%+ match
+// error = compareImages(image1, image2);
+// match = (1 - error);
+// if(match >= 0.9)
+//   stuff to do if matches;
+// else
+//   stuff to do if doesn't match;
 float compareImages(PImage img1, PImage img2) {
   PImage test1 = createImage(min(img1.width,img2.width),min(img1.height,img2.height),RGB);
   PImage test2 = createImage(min(img1.width,img2.width),min(img1.height,img2.height),RGB);
