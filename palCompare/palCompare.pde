@@ -11,8 +11,8 @@ color paletteCOne[] = new color[palSize];
 color paletteCTwo[] = new color[palSize];
 
 void setup() {
-  PImage img1 = loadImage("Corgi2.jpg");
-  PImage img2 = loadImage("Corgi2.jpg");
+  PImage img1 = loadImage("Corgi.jpg");
+  PImage img2 = loadImage("Corgi.jpg");
   clearColors();
   // use kmeans to get make palettes for both images
   makePalette(img1, paletteOne);
@@ -37,13 +37,34 @@ void setup() {
 // for each color, and recording the total of the distances
 // between all matches
 float comparePalette(color[] palette1, color[] palette2) {
+  int already[] = new int[palSize];
+  for(int i = 0; i < palSize; i++) {
+    already[i] = 0;
+  }
+  int q, current;
   float totalDistance = 0.0, minDistance, tmpDistance;
   for(int i = 0; i < palSize; i++) {
-    minDistance = abs(red(palette1[i])-red(palette2[0])) + abs(green(palette1[i])-green(palette2[0])) + abs(blue(palette1[i])-blue(palette2[0]));
-    for(int j = 1; j < palSize; j++) {
+    q = 0;
+    while(already[q] != 0) q++;
+    current = q;
+    minDistance = abs(red(palette1[i])-red(palette2[q])) + abs(green(palette1[i])-green(palette2[q])) + abs(blue(palette1[i])-blue(palette2[q]));
+    for(int j = q+1; j < palSize; j++) {
+      if(already[j] == 1) { 
+        continue;
+      }
       tmpDistance = abs(red(palette1[i])-red(palette2[j])) + abs(green(palette1[i])-green(palette2[j])) + abs(blue(palette1[i])-blue(palette2[j]));
-      minDistance = min(minDistance,tmpDistance);
+      //minDistance = min(minDistance,tmpDistance);
+      if(tmpDistance < minDistance) {
+        current = j;
+        minDistance = tmpDistance;
+      }
     }
+    already[current] = 1;
+    noStroke();
+    fill(palette1[i]);
+    rect(i*8,0,8,8);
+    fill(palette2[current]);
+    rect(i*8,8,8,8);
     totalDistance += minDistance;
   }
   return totalDistance / (255*palSize*3); // normalize!
@@ -56,6 +77,11 @@ void compilePalette(float[][] floatPalette, color[] colorPalette) {
   }
   
   return;
+}
+
+void pass() {
+  int time = millis() + 1000;
+  while(time > millis());
 }
 
 // initialize floating point arrays
