@@ -3,7 +3,7 @@ final int palSize = 100;
 // max iteration of the kmeans function - don't let it get too high
 final int maxIterations = 20;
 // distance threshold before the function quits early
-final float distThreshold = 25;
+final float deltaThreshold = 0.1;
 float paletteOne[][] = new float[palSize][3];
 float paletteTwo[][] = new float[palSize][3];
 float paletteTmp[][] = new float[palSize][4];
@@ -11,7 +11,7 @@ color paletteCOne[] = new color[palSize];
 color paletteCTwo[] = new color[palSize];
 
 void setup() {
-  PImage img1 = loadImage("Corgi.jpg");
+  PImage img1 = loadImage("Corgi2.jpg");
   PImage img2 = loadImage("Corgi2.jpg");
   clearColors();
   // use kmeans to get make palettes for both images
@@ -83,7 +83,7 @@ void makePalette(PImage img, float[][] palette) {
     palette[c][1] = green(tmpC);
     palette[c][2] = blue(tmpC); 
   }
-  float cdist, tmpdist, sumdist;
+  float cdist, tmpdist, sumdist, lastdist = -1.0;
   int currentColor;
   for(int i = 0; i < maxIterations; i++) {
     for(int c = 0; c < palSize; c++) {
@@ -118,10 +118,18 @@ void makePalette(PImage img, float[][] palette) {
         palette[c][2] = paletteTmp[c][2] / paletteTmp[c][3];
       }
     }
-    //println("dist:",sumdist);
-    if(sumdist < distThreshold) {
-      break;
+    print("dist:",sumdist," ");
+    if(lastdist > 0) {
+      println("delta:",abs(sumdist - lastdist));
+      if(abs(sumdist - lastdist) < deltaThreshold) {
+        break;
+      }
+      lastdist = sumdist;
     }
+    else {
+      println();
+      lastdist = sumdist;
+    } 
   }
 }
 
