@@ -1,5 +1,5 @@
 // size of palette - set to what you think is best
-final int palSize = 32;
+final int palSize = 100;
 // max iteration of the kmeans function - don't let it get too high
 final int maxIterations = 20;
 // distance threshold before the function quits early
@@ -28,8 +28,25 @@ void setup() {
     fill(paletteCTwo[i]);
     rect(i*8,8,8,8);
   }
+  println("diff",comparePalette(paletteCOne,paletteCTwo));
   // at this point, you have two nondeterministic palettes in the arrays paletteCOne, and paletteCTwo
   // for the two images. Come up with a way to determine the difference between the palettes
+}
+
+// get difference between two palettes by finding the closest match
+// for each color, and recording the total of the distances
+// between all matches
+float comparePalette(color[] palette1, color[] palette2) {
+  float totalDistance = 0.0, minDistance, tmpDistance;
+  for(int i = 0; i < palSize; i++) {
+    minDistance = abs(red(palette1[i])-red(palette2[0])) + abs(green(palette1[i])-green(palette2[0])) + abs(blue(palette1[i])-blue(palette2[0]));
+    for(int j = 1; j < palSize; j++) {
+      tmpDistance = abs(red(palette1[i])-red(palette2[j])) + abs(green(palette1[i])-green(palette2[j])) + abs(blue(palette1[i])-blue(palette2[j]));
+      minDistance = min(minDistance,tmpDistance);
+    }
+    totalDistance += minDistance;
+  }
+  return totalDistance / (255*palSize*3); // normalize!
 }
 
 // used to copy a floating point value palette array to a color array
