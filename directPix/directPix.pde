@@ -5,7 +5,7 @@ void setup() {
   source = loadImage("Corgi.jpg");
   compareTo = loadImage("Corgi-4.jpg");
   
-  float value = compareImages(source, compareTo);
+  float value = directCompareImages(source, compareTo);
   System.out.printf("Match: %.1f%%\n",(1.0-value)*100.0);
   if(value <= threshold) {
     println("it's a good enough match");
@@ -27,7 +27,7 @@ void setup() {
 //   stuff to do if matches;
 // else
 //   stuff to do if doesn't match;
-float compareImages(PImage img1, PImage img2) {
+float directCompareImages(PImage img1, PImage img2) {
   PImage test1 = createImage(min(img1.width,img2.width),min(img1.height,img2.height),RGB);
   PImage test2 = createImage(min(img1.width,img2.width),min(img1.height,img2.height),RGB);
   test1.copy(img1,0,0,img1.width,img1.height,0,0,test1.width,test1.height);
