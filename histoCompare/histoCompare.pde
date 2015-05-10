@@ -1,32 +1,10 @@
-float[] redOne, greenOne, blueOne;
-float[] redTwo, greenTwo, blueTwo;
 PImage img1, img2;
 
 void setup() {
-  redOne = new float[256];
-  redTwo = new float[256];
-  greenOne = new float[256];
-  greenTwo = new float[256];
-  blueOne = new float[256];
-  blueTwo = new float[256];
   
   img1 = loadImage("Corgi.jpg");
   img2 = loadImage("Corgi-3.jpg");
   println(histoCompare(img1,img2));
-}
-
-// reset histogram values to zero
-void clearHisto(){
-  for(int i = 0; i < 256; i++) {
-    redOne[i] = 0.0;
-    greenOne[i] = 0.0;
-    blueOne[i] = 0.0;
-    redTwo[i] = 0.0;
-    greenTwo[i] = 0.0;
-    blueTwo[i] = 0.0;
-  }
-  
-  return;
 }
 
 // make a histogram using an image, and three float arrays of size
@@ -61,7 +39,21 @@ void buildHisto(PImage img, float[] red, float[] green, float[] blue) {
 
 // function to compare two images via histogram. returns difference from 0 to 1
 float histoCompare(PImage img1, PImage img2) {
-  clearHisto();
+  float[] redOne = new float[256];
+  float[] greenOne = new float[256];
+  float[] blueOne = new float[256];
+  float[] redTwo = new float[256];
+  float[] greenTwo = new float[256];
+  float[] blueTwo = new float[256];
+  
+  for(int i = 0; i < 256; i++) {
+    redOne[i] = 0.0;
+    greenOne[i] = 0.0;
+    blueOne[i] = 0.0;
+    redTwo[i] = 0.0;
+    greenTwo[i] = 0.0;
+    blueTwo[i] = 0.0;
+  }
   buildHisto(img1,redOne,greenOne,blueOne);
   buildHisto(img2,redTwo,greenTwo,blueTwo);
   float error=0.0;

@@ -4,33 +4,47 @@ final int palSize = 100;
 final int maxIterations = 20;
 // distance threshold before the function quits early
 final float deltaThreshold = 0.1;
-float paletteOne[][] = new float[palSize][3];
-float paletteTwo[][] = new float[palSize][3];
-float paletteTmp[][] = new float[palSize][4];
-color paletteCOne[] = new color[palSize];
-color paletteCTwo[] = new color[palSize];
 
-void setup() {
-  PImage img1 = loadImage("Corgi.jpg");
-  PImage img2 = loadImage("Corgi.jpg");
-  clearColors();
-  // use kmeans to get make palettes for both images
+
+float paletteImageCompare(PImage img1, PImage img2) {
+  float paletteOne[][] = new float[palSize][3];
+  float paletteTwo[][] = new float[palSize][3];
+  color paletteCOne[] = new color[palSize];
+  color paletteCTwo[] = new color[palSize];
+  
+  for(int i = 0; i < palSize; i++) {
+    paletteOne[i][0] = 0.0;
+    paletteOne[i][1] = 0.0;
+    paletteOne[i][2] = 0.0;
+    paletteTwo[i][0] = 0.0;
+    paletteTwo[i][1] = 0.0;
+    paletteTwo[i][2] = 0.0;
+  }
+  
   makePalette(img1, paletteOne);
   makePalette(img2, paletteTwo);
-  // write the palettes to a color array
   compilePalette(paletteOne, paletteCOne);
   compilePalette(paletteTwo, paletteCTwo);
-  size(palSize*8,16);
+  
+  // for debug
+  /* size(palSize*8,16);
   noStroke();
   for(int i = 0; i < palSize; i++) {
     fill(paletteCOne[i]);
     rect(i*8,0,8,8);
     fill(paletteCTwo[i]);
     rect(i*8,8,8,8);
-  }
-  println("diff",comparePalette(paletteCOne,paletteCTwo));
-  // at this point, you have two nondeterministic palettes in the arrays paletteCOne, and paletteCTwo
-  // for the two images. Come up with a way to determine the difference between the palettes
+  } */
+  
+  return comparePalette(paletteCOne,paletteCTwo);
+} 
+
+void setup() {
+  PImage img1 = loadImage("Corgi.jpg");
+  PImage img2 = loadImage("Corgi.jpg");
+  // write the palettes to a color array
+  
+  println(paletteImageCompare(img1,img2));
 }
 
 // get difference between two palettes by finding the closest match
@@ -79,27 +93,9 @@ void compilePalette(float[][] floatPalette, color[] colorPalette) {
   return;
 }
 
-void pass() {
-  int time = millis() + 1000;
-  while(time > millis());
-}
-
-// initialize floating point arrays
-void clearColors() {
-  for(int i = 0; i < palSize; i++) {
-    paletteOne[i][0] = 0.0;
-    paletteOne[i][1] = 0.0;
-    paletteOne[i][2] = 0.0;
-    paletteTwo[i][0] = 0.0;
-    paletteTwo[i][1] = 0.0;
-    paletteTwo[i][2] = 0.0;
-  }
-  
-  return;
-}
-
 // nondeterministic kmeans function. generates a palette
 void makePalette(PImage img, float[][] palette) {
+  float paletteTmp[][] = new float[palSize][4];
   color tmpC;  
   img.loadPixels();
   // nondeterministic part. You can hack this to make it deterministic if you need
