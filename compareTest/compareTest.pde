@@ -21,8 +21,11 @@ void setup() {
 }
 
 void setSource(File selection) {
+  // check if file is valid (non-null)
+  
   println("File selected:",selection.getAbsolutePath());
   sourceImg = loadImage(selection.getAbsolutePath());
+  // check if file is an image
   
   PImage compareTo;
   int count;
@@ -43,6 +46,8 @@ void setSource(File selection) {
   for(int i = 0; i < sortedDiff.size(); i++) {
     println(sortedNames.get(i),sortedDiff.get(i));
   }
+  
+  return;
 }
 
 void updateFiles() {
@@ -50,6 +55,7 @@ void updateFiles() {
   imgNames.clear();
   files = dir.listFiles();
   String path,name;
+  
   for(int i = 0; i < files.length; i++) {
     path = files[i].getAbsolutePath();
     name = files[i].getName();
@@ -58,5 +64,7 @@ void updateFiles() {
       imgNames.add(name);
     }
   }
+  
+  return;
 }
 

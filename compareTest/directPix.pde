@@ -10,6 +10,7 @@ float directPixelCompare(PImage img1, PImage img2) {
   test2.copy(img2,0,0,img2.width,img2.height,0,0,test2.width,test2.height);
   test1.loadPixels();
   test2.loadPixels();
+  
   float difference=0.0, dr, dg, db;
   for(int i = 0; i < test1.pixels.length; i++) {
     color p1 = test1.pixels[i];
@@ -21,5 +22,6 @@ float directPixelCompare(PImage img1, PImage img2) {
     
     difference += sqrt(dr*dr + dg*dg + db*db)/255.0;
   }
+  
   return difference/(test1.width*test1.height);
 } 

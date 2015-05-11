@@ -145,6 +145,7 @@ float comparePalette(color[] palette1, color[] palette2) {
     rect(i*8,8,8,8);
     totalDistance += minDistance;
   }
+  
   return totalDistance / (255*palSize*3); // normalize!
 }
 
@@ -220,6 +221,8 @@ void makePalette(PImage img, float[][] palette) {
       lastdist = sumdist;
     } 
   }
+  
+  return;
 }
 
 

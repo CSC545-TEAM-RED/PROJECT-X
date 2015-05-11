@@ -49,14 +49,17 @@ float histoCompare(PImage img1, PImage img2) {
     greenTwo[i] = 0.0;
     blueTwo[i] = 0.0;
   }
+  
   buildHisto(img1,redOne,greenOne,blueOne);
   buildHisto(img2,redTwo,greenTwo,blueTwo);
+  
   float error=0.0;
   for(int i = 0; i < 256; i++) {
     error += abs(redOne[i] - redTwo[i]);
     error += abs(greenOne[i] - greenTwo[i]);
     error += abs(blueOne[i] - blueTwo[i]);
   }
+  
   error /= (768.0); // normalize error 
   
   return error;
