@@ -33,7 +33,7 @@ void setSource(File selection) {
     histo = histoCompare(sourceImg, compareTo);
     direct = directPixelCompare(sourceImg, compareTo);
     pal = paletteImageCompare(sourceImg, compareTo);
-    total = histo+direct+pal;
+    total = (histo+direct+pal)/3;
     count = 0;
     while(count < sortedDiff.size() && total > sortedDiff.get(count)) count++;
     sortedDiff.add(count,total);
@@ -41,7 +41,7 @@ void setSource(File selection) {
   }
   
   for(int i = 0; i < sortedDiff.size(); i++) {
-    println(sortedNames.get(i),sortedDiff.get(i)/3);
+    println(sortedNames.get(i),sortedDiff.get(i));
   }
 }
 

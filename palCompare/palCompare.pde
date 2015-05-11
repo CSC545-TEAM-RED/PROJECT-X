@@ -1,9 +1,9 @@
 // size of palette - set to what you think is best
-final int palSize = 100;
+final int palSize = 108;
 // max iteration of the kmeans function - don't let it get too high
 final int maxIterations = 20;
 // distance threshold before the function quits early
-final float deltaThreshold = 0.1;
+final float deltaThreshold = 0.5;
 
 
 float paletteImageCompare(PImage img1, PImage img2) {
@@ -52,20 +52,20 @@ void setup() {
 // between all matches
 float comparePalette(color[] palette1, color[] palette2) {
   int already[] = new int[palSize];
-  for(int i = 0; i < palSize; i++) {
+  /*for(int i = 0; i < palSize; i++) {
     already[i] = 0;
-  }
+  }*/
   int q, current;
   float totalDistance = 0.0, minDistance, tmpDistance;
   for(int i = 0; i < palSize; i++) {
     q = 0;
-    while(already[q] != 0) q++;
+    //while(already[q] != 0) q++; // uncomment for one-to-one palette matching
     current = q;
     minDistance = abs(red(palette1[i])-red(palette2[q])) + abs(green(palette1[i])-green(palette2[q])) + abs(blue(palette1[i])-blue(palette2[q]));
     for(int j = q+1; j < palSize; j++) {
-      if(already[j] == 1) { 
+      /*if(already[j] == 1) { //uncomment for one-to-one palette matching
         continue;
-      }
+      }*/
       tmpDistance = abs(red(palette1[i])-red(palette2[j])) + abs(green(palette1[i])-green(palette2[j])) + abs(blue(palette1[i])-blue(palette2[j]));
       //minDistance = min(minDistance,tmpDistance);
       if(tmpDistance < minDistance) {
@@ -73,7 +73,7 @@ float comparePalette(color[] palette1, color[] palette2) {
         minDistance = tmpDistance;
       }
     }
-    already[current] = 1;
+    //already[current] = 1;
     noStroke();
     fill(palette1[i]);
     rect(i*8,0,8,8);
@@ -137,6 +137,7 @@ void initPalette(PImage img, float[][] palette) {
     }
   }
   
+  
   count = 0;
   while(count < 256 && greenPos < palSize) {
     if(green[count] < greenCount) { // find next increment
@@ -160,6 +161,8 @@ void initPalette(PImage img, float[][] palette) {
       bluePos ++;
     }
   }    
+  
+  
   
   return;
 }

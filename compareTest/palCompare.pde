@@ -123,13 +123,13 @@ float comparePalette(color[] palette1, color[] palette2) {
   float totalDistance = 0.0, minDistance, tmpDistance;
   for(int i = 0; i < palSize; i++) {
     q = 0;
-    while(already[q] != 0) q++;
+    //while(already[q] != 0) q++; //uncomment for one-to-one palette matching
     current = q;
     minDistance = abs(red(palette1[i])-red(palette2[q])) + abs(green(palette1[i])-green(palette2[q])) + abs(blue(palette1[i])-blue(palette2[q]));
     for(int j = q+1; j < palSize; j++) {
-      if(already[j] == 1) { 
+      /*if(already[j] == 1) { //uncomment for one-to-one palette matching
         continue;
-      }
+      }*/
       tmpDistance = abs(red(palette1[i])-red(palette2[j])) + abs(green(palette1[i])-green(palette2[j])) + abs(blue(palette1[i])-blue(palette2[j]));
       //minDistance = min(minDistance,tmpDistance);
       if(tmpDistance < minDistance) {
