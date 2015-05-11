@@ -7,6 +7,7 @@ ArrayList<String> imgNames = new ArrayList<String>();
 PImage sourceImg;
 ArrayList<String> sortedNames = new ArrayList<String>();
 ArrayList<Float> sortedDiff = new ArrayList<Float>();
+float searchQuality;
 
 void setup() {
   dir = new File(dataPath("")); // set the data folder to hold files to search from
@@ -15,6 +16,11 @@ void setup() {
   /*for(int i = 0; i < imgFiles.size(); i++) {
     println(imgFiles.get(i),imgNames.get(i));
   }*/
+  //searchQuality = 0.25; // general search
+  //searchQuality = 0.50; // relaxed search
+  searchQuality = 0.70; // good search
+  //searchQuality = 0.85; // strict search
+  //searchQuality = 0.95; // best search
   
   selectInput("select a file to search for:", "setSource");
   
@@ -44,7 +50,9 @@ void setSource(File selection) {
   }
   
   for(int i = 0; i < sortedDiff.size(); i++) {
-    println(sortedNames.get(i),sortedDiff.get(i));
+    //println(sortedNames.get(i),sortedDiff.get(i));
+    if(1-sortedDiff.get(i) < searchQuality) break; // don't include results below selected quality
+    System.out.printf("File:%s Match: %.1f%%\n",sortedNames.get(i),(1.0-sortedDiff.get(i))*100.0);
   }
   
   return;
