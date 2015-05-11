@@ -47,10 +47,51 @@ void setup() {
   println(paletteImageCompare(img1,img2));
 }
 
+// beta comparison algorithm
+float comparePalette(color[] palette1, color[] palette2) {
+  int already1[] = new int[palSize];
+  int already2[] = new int[palSize];
+  float total = 0.0;
+  
+  for(int i = 0; i < palSize; i++) {
+    already1[i] = 0;
+    already2[i] = 0;
+  }
+  
+  int theLowestK = 0, theLowestJ = 0;
+  float minDiffK, minDiffJ, tmpDiff;
+  for(int i = 0; i < palSize; i++) {
+    minDiffJ = 765.0;
+    for(int j = 0; j < palSize; j++) {
+      if(already1[j] != 0) continue;
+      minDiffK = 765.0;
+      for(int k = 0; k < palSize; k++) {
+        if(already2[k] != 0) continue;
+        tmpDiff = abs(red(palette1[j])-red(palette2[k])) + abs(green(palette1[j])-green(palette2[k])) + abs(blue(palette1[j])-blue(palette2[k]));
+        if(tmpDiff < minDiffK) {
+          minDiffK = tmpDiff;
+          theLowestK = k;
+        }
+      }
+      if(minDiffK < minDiffJ) {
+        
+        minDiffJ = minDiffK;
+        theLowestJ = j;
+      }
+    }
+    already1[theLowestK] = 1;
+    already2[theLowestJ] = 1;
+    println(theLowestK, theLowestJ);
+    total += minDiffJ;
+  }
+  
+  return total;
+}
+
 // get difference between two palettes by finding the closest match
 // for each color, and recording the total of the distances
 // between all matches
-float comparePalette(color[] palette1, color[] palette2) {
+/*float comparePalette(color[] palette1, color[] palette2) {
   int already[] = new int[palSize];
   for(int i = 0; i < palSize; i++) {
     already[i] = 0;
@@ -82,7 +123,7 @@ float comparePalette(color[] palette1, color[] palette2) {
     totalDistance += minDistance;
   }
   return totalDistance / (255*palSize*3); // normalize!
-}
+}*/
 
 // used to copy a floating point value palette array to a color array
 void compilePalette(float[][] floatPalette, color[] colorPalette) {
