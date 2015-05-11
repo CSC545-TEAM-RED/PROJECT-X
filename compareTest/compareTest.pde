@@ -5,6 +5,8 @@ File[] files;
 ArrayList<String> imgFiles = new ArrayList<String>();
 ArrayList<String> imgNames = new ArrayList<String>();
 PImage sourceImg;
+ArrayList<String> sortedNames = new ArrayList<String>();
+ArrayList<Float> sortedDiff = new ArrayList<Float>();
 
 void setup() {
   dir = new File(dataPath("")); // set the data folder to hold files to search from
@@ -23,15 +25,23 @@ void setSource(File selection) {
   sourceImg = loadImage(selection.getAbsolutePath());
   
   PImage compareTo;
+  int count;
   float histo, direct, pal, total;
   for(int i = 0; i < imgFiles.size(); i++) {
+    println("Comparing with:",imgFiles.get(i));
     compareTo = loadImage(imgFiles.get(i));
     histo = histoCompare(sourceImg, compareTo);
     direct = directPixelCompare(sourceImg, compareTo);
-    //pal = paletteImageCompare(sourceImg, compareTo);
-    pal = 0.0;
+    pal = paletteImageCompare(sourceImg, compareTo);
     total = histo+direct+pal;
-    println(imgNames.get(i),total);
+    count = 0;
+    while(count < sortedDiff.size() && total > sortedDiff.get(count)) count++;
+    sortedDiff.add(count,total);
+    sortedNames.add(count,imgNames.get(i));
+  }
+  
+  for(int i = 0; i < sortedDiff.size(); i++) {
+    println(sortedNames.get(i),sortedDiff.get(i));
   }
 }
 
