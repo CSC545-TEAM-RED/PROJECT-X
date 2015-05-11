@@ -41,7 +41,7 @@ void setSource(File selection) {
   }
   
   for(int i = 0; i < sortedDiff.size(); i++) {
-    println(sortedNames.get(i),sortedDiff.get(i));
+    println(sortedNames.get(i),sortedDiff.get(i)/3);
   }
 }
 

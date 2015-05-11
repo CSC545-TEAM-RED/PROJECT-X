@@ -27,21 +27,21 @@ float paletteImageCompare(PImage img1, PImage img2) {
   compilePalette(paletteTwo, paletteCTwo);
   
   // for debug
-  /* size(palSize*8,16);
+   size(palSize*8,16);
   noStroke();
   for(int i = 0; i < palSize; i++) {
     fill(paletteCOne[i]);
     rect(i*8,0,8,8);
     fill(paletteCTwo[i]);
     rect(i*8,8,8,8);
-  } */
+  } 
   
   return comparePalette(paletteCOne,paletteCTwo);
 } 
 
 void setup() {
   PImage img1 = loadImage("Corgi.jpg");
-  PImage img2 = loadImage("Corgi.jpg");
+  PImage img2 = loadImage("Corgi8.jpg");
   // write the palettes to a color array
   
   println(paletteImageCompare(img1,img2));
@@ -93,18 +93,92 @@ void compilePalette(float[][] floatPalette, color[] colorPalette) {
   return;
 }
 
+void initPalette(PImage img, float[][] palette) {
+  int red[] = new int[256];
+  int green[] = new int[256];
+  int blue[] = new int[256];
+  img.loadPixels();
+  
+  for(int i = 0; i < 256; i++) {
+    red[i] = 0;
+    green[i] = 0;
+    blue[i] = 0;
+  }
+  
+  
+  for(int i = 0; i < img.pixels.length; i++) {
+    red[int(red(img.pixels[i]))]++;
+    green[int(green(img.pixels[i]))]++;
+    blue[int(blue(img.pixels[i]))]++;
+  }
+  
+  for(int i = 1; i < 256; i++) {
+    red[i] += red[i-1];
+    green[i] += green[i-1];
+    blue[i] += blue[i-1];
+  }
+  
+  float redIncrement = float(red[255])/float(palSize+1);
+  float greenIncrement = float(green[255])/float(palSize+1);
+  float blueIncrement = float(blue[255])/float(palSize+1);
+  float redCount = 0.0, greenCount = 0.0, blueCount = 0.0;
+  int redPos = 0, greenPos = 0, bluePos = 0;
+  int count;
+  
+  count = 0;
+  while(count < 256 && redPos < palSize) {
+    if(red[count] < redCount) { // find next increment
+      count++;
+    }
+    else {
+      redCount += redIncrement;
+      palette[redPos][0] = count;
+      redPos ++;
+    }
+  }
+  
+  count = 0;
+  while(count < 256 && greenPos < palSize) {
+    if(green[count] < greenCount) { // find next increment
+      count++;
+    }
+    else {
+      greenCount += greenIncrement;
+      palette[greenPos][0] = count;
+      greenPos ++;
+    }
+  }  
+  
+  count = 0;
+  while(count < 256 && bluePos < palSize) {
+    if(blue[count] < blueCount) { // find next increment
+      count++;
+    }
+    else {
+      blueCount += blueIncrement;
+      palette[bluePos][0] = count;
+      bluePos ++;
+    }
+  }    
+  
+  return;
+}
+
 // nondeterministic kmeans function. generates a palette
 void makePalette(PImage img, float[][] palette) {
   float paletteTmp[][] = new float[palSize][4];
   color tmpC;  
   img.loadPixels();
   // nondeterministic part. You can hack this to make it deterministic if you need
-  for(int c = 0; c < palSize; c++) {
+  /*for(int c = 0; c < palSize; c++) {
     tmpC = img.pixels[int(random(0,img.pixels.length))];
     palette[c][0] = red(tmpC);
     palette[c][1] = green(tmpC);
     palette[c][2] = blue(tmpC); 
-  }
+  }*/
+  
+  initPalette(img,palette);
+  
   float cdist, tmpdist, sumdist, lastdist = -1.0;
   int currentColor;
   for(int i = 0; i < maxIterations; i++) {
