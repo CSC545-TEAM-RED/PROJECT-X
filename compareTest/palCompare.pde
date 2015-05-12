@@ -1,9 +1,9 @@
 // size of palette - set to what you think is best
 final int palSize = 100;
 // max iteration of the kmeans function - don't let it get too high
-final int maxIterations = 20;
+final int maxIterations = 5;
 // distance threshold before the function quits early
-final float deltaThreshold = 0.1;
+final float deltaThreshold = 0.5;
 
 // use paletteImageCompare(img1, img2)
 
