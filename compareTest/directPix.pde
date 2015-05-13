@@ -31,10 +31,10 @@ float comparePixels(PImage img1, PImage img2) {
     dg = green(p1) - green(p2);
     db = blue(p1) - blue(p2);
     
-    difference += sqrt(dr*dr + dg*dg + db*db)/255.0;
+    difference += abs(dr) + abs(dg) + abs(db);
   }
   
-  return difference/(test1.width*test1.height);
+  return difference/(test1.width*test1.height*3*255);
 } 
 
 PImage[] makePermutations(PImage input) {
