@@ -6,6 +6,9 @@ Group Red Project GUI
 
 import controlP5.*;
 import java.nio.*;
+import java.nio.file.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.File;
 
 ControlP5 cp5;
@@ -20,8 +23,7 @@ int functionIndex, imageCount = 0, numSelected;
 boolean onLoadImage = false, onLoadBest = false;
 
 String selectedName = "Corgi.jpg";  // Change this to work with uploaded image...
-PImage selectedImage;               // Change this to work with uploaded image...
-
+PImage selectedImage;               // Change this to work with uploaded imag
 PGraphics rankImg;    // for displaying the top 10 matches
 boolean[] methods = {false, false, false, false};  // whether to include each method 
                         // (directPixel, histogram, palette, keypoint) in finding results
@@ -34,7 +36,7 @@ void setup() {
   rankImg.beginDraw();
   rankImg.endDraw();
   
-  selectedImage = loadImage(selectedName);
+  
   
   smooth();
   dir = new File(dataPath("")); // set the data folder to hold files to search from
@@ -105,6 +107,8 @@ void setup() {
      .setColorBackground(color(255, 128,15)) //background
      .setColorActive(color(155)) //clicked
       ; 
+      
+      selectedImage = loadImage(imgNames.get(0));
 }
 
 
@@ -193,15 +197,21 @@ void fileSelected(File selection) {
   }
   ListBoxItem lbi = l.addItem(selection.getName(), imageCount);
   lbi.setColorBackground(color(0,205,215));
-  println(selection.getName());
+  String name = selection.getName();
   File toSave = saveFile(selection.getName());
-  println(toSave);
-  File dest = new File(savePath("/data/"), selection.getName());
+  //println("toSave: " + toSave);
+  String file = selection.getAbsolutePath();
+  String destDir = dir.getAbsolutePath();
+  Path source = Paths.get(file);
+  Path newDir = Paths.get(destDir);
+  imgNames.add(name);
+  String newPath = newDir +"\\"+ name;
+  imgFiles.add(newPath);
+  //println("newPath: " + newPath);
+  try{
+    Files.copy(source, newDir.resolve(source.getFileName()));
+  } catch(IOException e) {} 
   
-  //.copy(selection.toPath(),dest.toPath());
-  //if (!s) {
-    // println("not moved");
-  //}
   
 }
 
@@ -225,11 +235,15 @@ void controlEvent(ControlEvent theEvent) {
   if (theEvent.isGroup()) {
     // an event from a group e.g. scrollList
     println(theEvent.group().value()+" from "+theEvent.group());
+    int index = (int)theEvent.group().value();
+    selectedName = imgNames.get(index);
+    println("selected Image: " + selectedName);
+    selectedImage = loadImage(selectedName);
   }
   
-  if(theEvent.isGroup() && theEvent.name().equals("ImagesList")){
+  if(theEvent.isGroup() && theEvent.name().equals("imageList")){
     int test = (int)theEvent.group().value();
-    println("test "+test);
+    //println("test "+test);
   }
 }
 void keyPressed() {
