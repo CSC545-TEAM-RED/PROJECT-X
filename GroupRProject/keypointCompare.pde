@@ -6,7 +6,6 @@ import org.opencv.imgproc.Imgproc;
 
 
 float keyPointCompare(PImage img1, PImage img2) {
-  System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
   
   FeatureDetector detector = FeatureDetector.create(FeatureDetector.ORB);
 

@@ -21,6 +21,7 @@ PGraphics showMatches(String targetFilename, PImage targetImg, ArrayList<String>
   // and sort them as we go using insertion sort.
   PImage compareTo;
   int count;
+  System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
   for(int i = 0; i < imgFiles.size(); i++) {
     
     compareTo = loadImage(imgFiles.get(i));
