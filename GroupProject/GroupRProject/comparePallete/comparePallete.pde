@@ -24,29 +24,23 @@ float THRESH = 0.1;
 ////    }
 ////  }
 //}
-void compareWrapper(String filename1, String filename2){
-  img1 = loadImage(filename1);
-  img2 = loadImage(filename2);
+int[][] kMeansWrapper(String filename1){
+  PImage img1 = loadImage(filename1);
   size(img1.width,img1.height);
   int[][] img1Data = new int[img1.width*img1.height][3];
   int[][] img1KData = img1Data;
-  int[][] img2Data = new int[img2.width*img2.height][3];
-  int[][] img2KData = img2Data;
   int[][] pallete1 = new int[NUMCOLORS][3];
-  int[][] pallete2 = new int[NUMCOLORS][3];
   img1Data = getimgData(img1);
   pallete1 = initPallete(img1);
   img1KData = getPallete(img1Data,pallete1);
   //printData(pallete);
   img1K = applyPallete(img1Data,img1);
-  img2Data = getimgData(img2);
-  pallete2 = initPallete(img2);
-  img2KData = getPallete(img2Data,pallete2);
-  //printData(pallete2);
-  img2K = applyPallete(img2Data,img2);
-  comparePallete(pallete1,pallete2);
-//  image(img1,0,0);
+  //image(img1,0,0);
+  return pallete1;
 }
+float compareWrapper(int[][] pallete1, int[][] pallete2){
+  return comparePallete(pallete1,pallete2);
+}  
   
 int[][] getimgData(PImage img){
   // Puts all pixels of an image into an 2d array
@@ -220,7 +214,8 @@ int[][] getPallete(int[][] imgData, int[][] pallete){
       matches[i][2] = pallete[0][2];
       for(int p = 1; p < pallete.length; p ++){ // For each pallete color
         distance = getDist(imgData[i],pallete[p]);
-        if(distance < prevDist){ // The the current pallete color is better...
+        if(distance < prevDist &&  matches[i][0] != pallete[p][0] && matches[i][1] != pallete[p][1]
+          && matches[i][2] != pallete[p][2]){ // The the current pallete color is better...
           matches[i][0] = pallete[p][0];   // make it the current match
           matches[i][1] = pallete[p][1];
           matches[i][2] = pallete[p][2];
