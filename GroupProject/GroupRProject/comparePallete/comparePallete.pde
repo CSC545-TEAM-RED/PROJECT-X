@@ -2,28 +2,28 @@ int NUMCOLORS = 100;
 int ITERATIONS = 10; // K means iterations
 float THRESH = 0.1;
 
-PImage img1,img2,img1K,img2K;
-
-void setup(){
-  String fileName ="Corgi.jpg";
-  String fileName2 = "Corgi8.jpg";
-  compareWrapper(fileName,fileName2);
-}
-void draw(){
-//  if(displayPallete == true){
-//    startX = 0;
-//    startY = 0;
-//    for(int i = 0; i < NUMCOLORS; i ++){
-//      if(startX % 50 == 0){
-//        startX = 0;
-//        startY += 10;
-//      }
-//      fill(color(currentPallete[i][0],currentPallete[i][1],currentPallete[i][2]));
-//      rect(startX,startY,10,10);
-//      startX += 10;
-//    }
-//  }
-}
+//PImage img1,img2,img1K,img2K;
+//
+//void setup(){
+//  String fileName ="Corgi.jpg";
+//  String fileName2 = "Corgi8.jpg";
+//  compareWrapper(fileName,fileName2);
+//}
+//void draw(){
+////  if(displayPallete == true){
+////    startX = 0;
+////    startY = 0;
+////    for(int i = 0; i < NUMCOLORS; i ++){
+////      if(startX % 50 == 0){
+////        startX = 0;
+////        startY += 10;
+////      }
+////      fill(color(currentPallete[i][0],currentPallete[i][1],currentPallete[i][2]));
+////      rect(startX,startY,10,10);
+////      startX += 10;
+////    }
+////  }
+//}
 void compareWrapper(String filename1, String filename2){
   img1 = loadImage(filename1);
   img2 = loadImage(filename2);
@@ -45,7 +45,7 @@ void compareWrapper(String filename1, String filename2){
   //printData(pallete2);
   img2K = applyPallete(img2Data,img2);
   comparePallete(pallete1,pallete2);
-  image(img1,0,0);
+//  image(img1,0,0);
 }
   
 int[][] getimgData(PImage img){
@@ -141,19 +141,19 @@ int [][] initPallete(PImage img){
 //    divisorX = 2;
 //    divisorY = 2;
 //  }
-  println("divisorX: ",divisorX);
-  println("divisorY: ",divisorY);
-  println("width: ",img.width);
-  println("height: ",img.height);
-  println("x: ",xIncr);
-  println("y: ",yIncr);
+//  println("divisorX: ",divisorX);
+//  println("divisorY: ",divisorY);
+//  println("width: ",img.width);
+//  println("height: ",img.height);
+//  println("x: ",xIncr);
+//  println("y: ",yIncr);
    
   index = getSamples(img, xIncr, yIncr, index, pallete);
   while(index != NUMCOLORS){
     index = getSamples(img,xIncr/2+xIncr,yIncr/2+yIncr,index,pallete);
   }
   
-  printData(pallete);
+ // printData(pallete);
   return pallete;
 }
 void setRedBox(PImage img, int w, int x, int y){
@@ -258,7 +258,7 @@ int[][] getPallete(int[][] imgData, int[][] pallete){
       }
     }
     convergence = palleteConverge(oldPallete,pallete);  // compare the pallete we just calculated with old pallete
-    println("convergence: ",convergence);
+    //println("convergence: ",convergence);
     iterations ++;
 //    if(iterations == ITERATIONS){
 //      println("Stopped on iterations");
@@ -300,28 +300,28 @@ float comparePallete(int[][] pallete1, int[][] pallete2){
   return total;
 }
 
-void keyPressed(){
-  if(key == '1'){
-    image(img1,0,0);
-    //displayPallete = false;
-  //  currentPallete = pallete1;
-  }
-  else if(key == '2'){
-    image(img1K,0,0);
-    //displayPallete = false;
-   // currentPallete = pallete1;
-  }
-  else if(key == '3'){
-    image(img2,0,0);
-    //displayPallete = false;
-   // currentPallete = pallete2;
-  }
-  else if(key == '4'){
-    image(img2K,0,0);
-    //displayPallete = false;
-   // currentPallete = pallete2;
-  }
-  else if(key == 'p'){
-    //displayPallete = true;
-  }
-}
+//void keyPressed(){
+//  if(key == '1'){
+//    image(img1,0,0);
+//    //displayPallete = false;
+//  //  currentPallete = pallete1;
+//  }
+//  else if(key == '2'){
+//    image(img1K,0,0);
+//    //displayPallete = false;
+//   // currentPallete = pallete1;
+//  }
+//  else if(key == '3'){
+//    image(img2,0,0);
+//    //displayPallete = false;
+//   // currentPallete = pallete2;
+//  }
+//  else if(key == '4'){
+//    image(img2K,0,0);
+//    //displayPallete = false;
+//   // currentPallete = pallete2;
+//  }
+//  else if(key == 'p'){
+//    //displayPallete = true;
+//  }
+//}
