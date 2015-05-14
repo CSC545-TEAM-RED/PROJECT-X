@@ -41,8 +41,9 @@ PGraphics showMatches(String targetFilename, PImage targetImg, ArrayList<String>
     if (methods[2]) {
       println("palette");
       methodCount += 1;
-      total += paletteCompare(targetImg, compareTo);
+      //total += paletteCompare(targetImg, compareTo);
       //total += paletteImageCompare(targetImg, compareTo);
+      total += compareWrapper(targetImg, compareTo);
     }
     if (methods[3]) {
       println("keypoint");
