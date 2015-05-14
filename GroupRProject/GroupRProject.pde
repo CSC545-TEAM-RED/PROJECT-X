@@ -21,9 +21,10 @@ ArrayList<String> imgFiles = new ArrayList<String>();
 ArrayList<String> imgNames = new ArrayList<String>();
 int functionIndex, imageCount = 0, numSelected;
 boolean onLoadImage = false, onLoadBest = false;
-
+boolean working = false;
 String selectedName = "Corgi.jpg";  // Change this to work with uploaded image...
-PImage selectedImage;               // Change this to work with uploaded imag
+PImage selectedImage;   // Change this to work with uploaded imag
+PImage currentS;
 PGraphics rankImg;    // for displaying the top 10 matches
 boolean[] methods = {false, false, false, false};  // whether to include each method 
                         // (directPixel, histogram, palette, keypoint) in finding results
@@ -109,6 +110,8 @@ void setup() {
       ; 
       
       selectedImage = loadImage(imgNames.get(0));
+      currentS = selectedImage.get();
+      currentS.resize(200,200);
 }
 
 
@@ -121,6 +124,14 @@ void draw() {
   
   popMatrix(); //reverts back to base layer
   
+  image(currentS, 0,0);
+  if(working){
+    //pushMatrix();
+    println("working");
+    ellipse(100,100,30,30);
+    line(100,100,100+15*cos(float(millis())/100),100+15*sin(float(millis())/100));
+    //popMatrix();
+  }
 }
 void backgroundObjects(){
   fill(0);
@@ -150,6 +161,7 @@ public void FindBestMatch(){  //when FindBestMatch is pressed
     onLoadBest = true; 
   } 
   else {
+    working = true;
     println("find button pressed"); 
     for (int i=0; i < checkbox.getArrayValue().length; i++) {
       int n = (int)checkbox.getArrayValue()[i];  // 1 if checked, 0 if not
@@ -161,6 +173,7 @@ public void FindBestMatch(){  //when FindBestMatch is pressed
     }
     rankImg = showMatches(selectedName, selectedImage, imgFiles, imgNames, methods);
   }
+  working = false;
 }
 
 
@@ -207,11 +220,16 @@ void fileSelected(File selection) {
   imgNames.add(name);
   String newPath = newDir +"\\"+ name;
   imgFiles.add(newPath);
-  //println("newPath: " + newPath);
+  println("newPath: " + newPath);
   try{
     Files.copy(source, newDir.resolve(source.getFileName()));
   } catch(IOException e) {} 
   
+  println("after copy");
+  selectedName= name;
+  selectedImage = loadImage(selectedName);
+  currentS = selectedImage.get();
+  currentS.resize(200,200);
   
 }
 
@@ -235,14 +253,15 @@ void controlEvent(ControlEvent theEvent) {
   if (theEvent.isGroup()) {
     // an event from a group e.g. scrollList
     println(theEvent.group().value()+" from "+theEvent.group());
+  }
+  
+  if(theEvent.isGroup() && theEvent.name().equals("imageList")){
     int index = (int)theEvent.group().value();
     selectedName = imgNames.get(index);
     println("selected Image: " + selectedName);
     selectedImage = loadImage(selectedName);
-  }
-  
-  if(theEvent.isGroup() && theEvent.name().equals("imageList")){
-    int test = (int)theEvent.group().value();
+    currentS = selectedImage.get();
+    currentS.resize(200,200);
     //println("test "+test);
   }
 }
