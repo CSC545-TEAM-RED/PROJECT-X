@@ -6,7 +6,11 @@ Group Red Project GUI
 
 import controlP5.*;
 import java.nio.*;
+import java.nio.file.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.File;
+//import org.apache.commons.io.FileUtils;
 
 ControlP5 cp5;
 
@@ -19,8 +23,9 @@ ArrayList<String> imgNames = new ArrayList<String>();
 int functionIndex, imageCount = 0, numSelected;
 boolean onLoadImage = false, onLoadBest = false;
 PImage selectedImage;
+
 void setup() {
-  size(1000, 700);
+  size(1200, 700);
   smooth();
   dir = new File(dataPath("")); // set the data folder to hold files to search from
   
@@ -96,6 +101,7 @@ void draw() {
   pushMatrix();//new layer to work on
   
   popMatrix(); //reverts back to base layer
+  
 }
 void backgroundObjects(){
   fill(0);
@@ -103,7 +109,7 @@ void backgroundObjects(){
   strokeWeight(2);
   //box in which shows image display area
   rect(0,0,200,200);
-  rect(200,0,800,700);
+  rect(200,0,1000,700);
 }
 
 
@@ -174,12 +180,13 @@ void fileSelected(File selection) {
   println(selection.getName());
   File toSave = saveFile(selection.getName());
   println(toSave);
-  File dest = new File(savePath("/data/"), selection.getName());
-  
-  //.copy(selection.toPath(),dest.toPath());
-  //if (!s) {
-    // println("not moved");
-  //}
+  String file = selection.getAbsolutePath();
+  String destDir = dir.getAbsolutePath();
+  Path source = Paths.get(file);
+  Path newDir = Paths.get(destDir);
+  try{
+    Files.copy(source, newDir.resolve(source.getFileName()));
+  } catch(IOException e) {} 
   
 }
 void callFunction(int index){ //insert functions that corrolate to the check boxes
@@ -228,6 +235,9 @@ void controlEvent(ControlEvent theEvent) {
   if(theEvent.isGroup() && theEvent.name().equals("ImagesList")){
     int test = (int)theEvent.group().value();
     println("test "+test);
+    String imgName = theEvent.getLabel();
+    print("imgName");
+    println(imgName);
   }
 }
 void keyPressed() {
