@@ -16,17 +16,18 @@ File dir;
 File[] files;
 ArrayList<String> imgFiles = new ArrayList<String>();
 ArrayList<String> imgNames = new ArrayList<String>();
-int functionIndex, imageCount = 0;
+int functionIndex, imageCount = 0, numSelected;
 boolean onLoadImage = false, onLoadBest = false;
+PImage selectedImage;
 void setup() {
   size(1000, 700);
   smooth();
   dir = new File(dataPath("")); // set the data folder to hold files to search from
-  getFilesOnStart();
+  
   cp5 = new ControlP5(this);
   //sets up check boxes
   checkbox = cp5.addCheckBox("checkBox")
-                .setPosition(25, 55)
+                .setPosition(25, 255)
                 .setColorForeground(color(75,255,230))//light blue when hover
                 .setColorBackground(color(255))
                 .setColorActive(color(255,187,10)) //light orange when clicked
@@ -39,17 +40,18 @@ void setup() {
                 .addItem("1", 1)
                 .addItem("2", 2)
                 .addItem("3", 3)
-                .addItem("4", 4)
                 ;
                 
    l = cp5.addListBox("imageList")
-         .setPosition(0, 300)
-         .setSize(200,300)
+         .setPosition(0, 450)
+         .setSize(200,260)
          .setItemHeight(20)
          .setBarHeight(20)
          .setColorBackground(color(255, 128,15))
-         .setColorActive(color(255))
-         .setColorForeground(color(255, 100,20))
+         .setColorActive(color(0,0,255)) //when over something that can be moved or clicked
+         .setColorForeground(color(100)) //scroll bar color and hover over everything else
+         .setScrollbarWidth(10)
+         .setColorValue(color(100))
          ;
 
   l.captionLabel().toUpperCase(true);
@@ -57,7 +59,7 @@ void setup() {
   l.captionLabel().setColor(color(255));
   l.captionLabel().style().marginTop = 3;
   l.valueLabel().style().marginTop = 3;
-  
+  getFilesOnStart();
   //for (int i=0;i<10;i++) {
    // ListBoxItem lbi = l.addItem("item "+i, i);
     //lbi.setColorBackground(color(0,205,215));
@@ -67,7 +69,7 @@ void setup() {
   cp5.addButton("LoadImage")
      .setLabel("      Load Image")
      .setValue(0)
-     .setPosition(20,15)
+     .setPosition(20,215)
      .setSize(150,25)
      .setColorForeground(color(225,155,180))// hover over
      .setColorBackground(color(255, 128,15)) //background
@@ -78,7 +80,7 @@ void setup() {
   cp5.addButton("FindBestMatch")
      .setLabel("      Find Best Match")
      .setValue(1)
-     .setPosition(20,230)
+     .setPosition(20,390)
      .setSize(150,25)
      .setColorForeground(color(225,155,180))// hover over
      .setColorBackground(color(255, 128,15)) //background
@@ -100,10 +102,15 @@ void backgroundObjects(){
   stroke(255);
   strokeWeight(2);
   //box in which shows image display area
+  rect(0,0,200,200);
   rect(200,0,800,700);
 }
-public void LoadImage(){
-  if(onLoadImage == false){
+
+
+
+
+public void LoadImage(){ //when loadImage button is pressed
+  if(onLoadImage == false){ //buttons are pressed randomly when GUI starts, makes it so they are not called
     onLoadImage = true;
   }
   else{
@@ -112,8 +119,8 @@ public void LoadImage(){
     selectInput("Select a file to process:", "fileSelected");
   }
 }
-public void FindBestMatch(){
- if(onLoadBest == false){
+public void FindBestMatch(){  //when FindBestMatch is pressed
+ if(onLoadBest == false){ //buttons are pressed randomly when GUI starts, makes it so they are not called
    onLoadBest = true; 
  }
  else{
@@ -122,13 +129,17 @@ public void FindBestMatch(){
    for (int i=0;i<checkbox.getArrayValue().length;i++) {
      int n = (int)checkbox.getArrayValue()[i];
         if(n==1) {
+          numSelected++;
           functionIndex= (int)checkbox.getItem(i).internalValue();
           callFunction(functionIndex);
         }
      } 
  }
 }
-void getFilesOnStart(){
+
+
+
+void getFilesOnStart(){ //gets the list of files from the data folder
    
   files = dir.listFiles();
   String path, name;
@@ -142,19 +153,16 @@ void getFilesOnStart(){
       println(files[i].getName());
       ListBoxItem lbi = l.addItem(files[i].getName(),i);
       lbi.setColorBackground(color(0,205,215));
+      imageCount++;
     }
     else{
       
     }
   }
-  for(int x = 0; x < imgNames.size(); x++){
-    String file = imgNames.get(x);
-    println("file being added: ", file);
-     imageCount++;
-  }
   return;   
    
 }
+
 void fileSelected(File selection) {
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
@@ -188,9 +196,6 @@ void callFunction(int index){ //insert functions that corrolate to the check box
       break;
     case 3:
       println("three");
-      break;
-    case 4:
-      println("four");
       break;
       
   }
